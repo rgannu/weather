@@ -1,0 +1,29 @@
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/weather
+    username: weather
+    password: admin
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        default_schema: weather
+    hibernate.ddl-auto: validate
+  flyway:
+    table: schema_version
+    locations:
+      - classpath:db/migration/
+#  security:
+#    oauth2:
+
+weather:
+  listOfCountries: AUS, BRA, CHN, GBR, USA
+  country.api:
+    base-url: https://restcountries.com/v3.1
+  openweathermap.api:
+    app-id: 5fadccb2613e125e230ad5c67a1024f9
+    base-url: http://api.openweathermap.org
+  fixer.api:
+    app-key: aaPBG5nEMPyGt5XTyZ0JzeVRYkQfX7fJ
+    base-url: https://api.apilayer.com
