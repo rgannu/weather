@@ -2,7 +2,13 @@
 
 A simple spring boot application to retrieve weather information.  
 
-### Setup
+## Setup
+
+[![Setup](weather-arch.png)]()
+
+## ER diagram
+
+[![ER Diagram](weather-er-diagram.png)]()
 
 ### Build and run the App
 
