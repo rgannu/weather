@@ -1,10 +1,15 @@
 package com.utopian.weather.service.internal;
 
-import com.utopian.weather.persistence.model.CurrencyInfo;
+import com.utopian.weather.persistence.model.Currency;
+import java.util.List;
 
 public interface CurrencyInternalService {
 
-    CurrencyInfo findByCode(String code);
+    Currency findByCode(String code);
 
-    CurrencyInfo findByName(String name);
+    Currency findByName(String name);
+
+    List<Currency> getAllCurrencies();
+
+    Currency getCurrencyInfo(String code);
 }

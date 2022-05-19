@@ -17,6 +17,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @Entity
 @Data
@@ -24,22 +25,24 @@ import lombok.Setter;
 @EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor(access = PROTECTED)
 @AllArgsConstructor(access = PROTECTED)
+@ToString
 public class ExchangeRate {
+
     @Id
     @GeneratedValue(generator = "pooled")
     @Setter(AccessLevel.NONE)
     private Long id;
 
     @NotNull
-    @Column(name="rate_date")
+    @Column(name = "rate_date")
     private LocalDate date;
 
     @OneToOne
-    @JoinColumn(name="base_currency_id")
+    @JoinColumn(name = "base_currency_id")
     private Currency base;
 
     @OneToOne
-    @JoinColumn(name="target_currency_id")
+    @JoinColumn(name = "target_currency_id")
     private Currency target;
 
     @NotNull

@@ -15,13 +15,14 @@ import org.hibernate.usertype.UserType;
 
 public class ListToTextArrayUserType implements UserType {
 
-    /** Constante contenant le type SQL "Array".
+    /**
+     * Constante contenant le type SQL "Array".
      */
-    protected static final int[] SQL_TYPES = { Types.ARRAY };
+    protected static final int[] SQL_TYPES = {Types.ARRAY};
 
     /**
-     * Return the SQL type codes for the columns mapped by this type. The
-     * codes are defined on <tt>java.sql.Types</tt>.
+     * Return the SQL type codes for the columns mapped by this type. The codes are defined on
+     * <tt>java.sql.Types</tt>.
      *
      * @return int[] the typecodes
      * @see Types
@@ -40,18 +41,17 @@ public class ListToTextArrayUserType implements UserType {
     }
 
     /**
-     * Retrieve an instance of the mapped class from a JDBC resultset. Implementors
-     * should handle possibility of null values.
+     * Retrieve an instance of the mapped class from a JDBC resultset. Implementors should handle
+     * possibility of null values.
      *
      * @param resultSet a JDBC result set.
-     * @param names the column names.
-     * @param session SQL en cours.
-     * @param owner the containing entity
+     * @param names     the column names.
+     * @param session   SQL en cours.
+     * @param owner     the containing entity
      * @return Object
-     * @throws HibernateException exception levée par Hibernate
-     * lors de la récupération des données.
-     * @throws SQLException exception SQL
-     * levées lors de la récupération des données.
+     * @throws HibernateException exception levée par Hibernate lors de la récupération des
+     *                            données.
+     * @throws SQLException       exception SQL levées lors de la récupération des données.
      */
     @Override
     public final Object nullSafeGet(
@@ -60,38 +60,39 @@ public class ListToTextArrayUserType implements UserType {
             final SharedSessionContractImplementor session,
             final Object owner) throws HibernateException, SQLException {
         Array array = resultSet.getArray(names[0]);
-        if(array == null){
+        if (array == null) {
             return null;
         }
-        return Lists.newArrayList((String[])array.getArray());
+        return Lists.newArrayList((String[]) array.getArray());
     }
 
     /**
-     * Write an instance of the mapped class to a prepared statement. Implementors
-     * should handle possibility of null values. A multi-column type should be written
-     * to parameters starting from <tt>index</tt>.
+     * Write an instance of the mapped class to a prepared statement. Implementors should handle
+     * possibility of null values. A multi-column type should be written to parameters starting
+     * from
+     * <tt>index</tt>.
      *
      * @param statement a JDBC prepared statement.
-     * @param value the object to write
-     * @param index statement parameter index
-     * @param session sql en cours
-     * @throws HibernateException exception levée par Hibernate
-     * lors de la récupération des données.
-     * @throws SQLException exception SQL
-     * levées lors de la récupération des données.
+     * @param value     the object to write
+     * @param index     statement parameter index
+     * @param session   sql en cours
+     * @throws HibernateException exception levée par Hibernate lors de la récupération des
+     *                            données.
+     * @throws SQLException       exception SQL levées lors de la récupération des données.
      */
     @Override
     public final void nullSafeSet(final PreparedStatement statement, final Object value,
-                                  final int index, final SharedSessionContractImplementor session) throws HibernateException, SQLException {
+            final int index, final SharedSessionContractImplementor session)
+            throws HibernateException, SQLException {
 
         if (value == null) {
             statement.setNull(index, SQL_TYPES[0]);
         } else if (value instanceof String) {
-            String[] singleValue = new String[] { (String)  value };
+            String[] singleValue = new String[]{(String) value};
             Array array = session.connection().createArrayOf("text", singleValue);
             statement.setArray(index, array);
         } else {
-            List listValue = (List)value;
+            List listValue = (List) value;
             String[] castObject = new String[listValue.size()];
             listValue.toArray(castObject);
             Array array = session.connection().createArrayOf("text", castObject);

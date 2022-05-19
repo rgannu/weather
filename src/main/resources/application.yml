@@ -7,7 +7,7 @@ spring:
   jpa:
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
+        dialect: com.utopian.weather.persistence.CustomPostgreSQLDialect
         default_schema: weather
     hibernate.ddl-auto: validate
   flyway:
@@ -19,6 +19,7 @@ spring:
 
 weather:
   listOfCountries: AUS, BRA, CHN, GBR, USA
+  targetCurrency: EUR
   country.api:
     base-url: https://restcountries.com/v3.1
   openweathermap.api:

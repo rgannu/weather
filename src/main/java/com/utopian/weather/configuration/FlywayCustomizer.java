@@ -32,6 +32,7 @@ public class FlywayCustomizer implements FlywayConfigurationCustomizer {
         configuration.outOfOrder(true);
         configuration.baselineOnMigrate(true);
         configuration.dataSource(dataSource);
-        configuration.validateOnMigrate(false);//this prevents flyway from failing when it can't find a missing dependency.
+        configuration.validateOnMigrate(
+                false);//this prevents flyway from failing when it can't find a missing dependency.
     }
 }

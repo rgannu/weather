@@ -4,6 +4,7 @@ import com.utopian.weather.persistence.model.CountryInfo;
 import java.util.List;
 
 public interface CountryService {
+
     CountryInfo findByCca2(String cca2);
 
     CountryInfo findByName(String name);

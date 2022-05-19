@@ -4,6 +4,7 @@ import static lombok.AccessLevel.PROTECTED;
 
 import com.sun.istack.NotNull;
 import java.time.LocalDate;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -19,6 +20,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @Entity
 @Data
@@ -26,17 +28,19 @@ import lombok.Setter;
 @EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor(access = PROTECTED)
 @AllArgsConstructor(access = PROTECTED)
+@ToString
 public class Weather {
+
     @Id
     @GeneratedValue(generator = "pooled")
     @Setter(AccessLevel.NONE)
     private Long id;
 
     @NotNull
-    @Column(name="weather_date", nullable = false)
+    @Column(name = "weather_date", nullable = false)
     private LocalDate date;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name = "COUNTRY_ID")
     private Country country;
 
@@ -44,9 +48,7 @@ public class Weather {
     @JoinColumn(name = "EXCHANGE_RATE_ID")
     private ExchangeRate exchangeRate;
 
-    // OpenWeatherMap API gives only the current weather (not historical)
-    // So, same entry will be duplicated for every date
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name = "CITY_WEATHER_ID")
     private CityWeather cityWeather;
 }

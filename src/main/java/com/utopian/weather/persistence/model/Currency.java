@@ -16,14 +16,15 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @Entity
 @Data
 @Builder
-@EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor(access = PROTECTED)
 @AllArgsConstructor(access = PROTECTED)
 public class Currency {
+
     @Id
     @GeneratedValue(generator = "pooled")
     @Setter(AccessLevel.NONE)
@@ -41,5 +42,7 @@ public class Currency {
 
     @OneToMany(mappedBy = "country")
     @Setter(AccessLevel.NONE)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private Set<CountryCurrency> countryCurrencies;
 }

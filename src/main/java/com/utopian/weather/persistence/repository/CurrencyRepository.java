@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 public interface CurrencyRepository extends CrudRepository<Currency, Long> {
 
     Optional<Currency> findByCode(String code);
+
     Optional<Currency> findByName(String name);
 
 }

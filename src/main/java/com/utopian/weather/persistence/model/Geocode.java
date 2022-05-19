@@ -3,10 +3,13 @@ package com.utopian.weather.persistence.model;
 import static lombok.AccessLevel.PROTECTED;
 
 import com.sun.istack.NotNull;
+import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,14 +17,17 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @Entity
 @Data
 @Builder
-@EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor(access = PROTECTED)
 @AllArgsConstructor(access = PROTECTED)
+@EqualsAndHashCode
+@ToString
 public class Geocode {
+
     @Id
     @GeneratedValue(generator = "pooled")
     @Setter(AccessLevel.NONE)
@@ -42,4 +48,9 @@ public class Geocode {
     @NotNull
     @Column(nullable = false)
     private Double lon;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "geocode")
+    @ToString.Exclude
+    private Set<CityWeather> cityWeathers;
+
 }

@@ -3,13 +3,10 @@ package com.utopian.weather.service.internal;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.utopian.weather.exception.CountryNotFoundException;
-import com.utopian.weather.mapper.ServiceMapper;
 import com.utopian.weather.persistence.model.Country;
-import com.utopian.weather.persistence.model.Country.CountryBuilder;
 import com.utopian.weather.persistence.model.CountryCreation;
 import com.utopian.weather.persistence.model.CountryCreation.CountryCreationBuilder;
 import com.utopian.weather.persistence.model.CountryCurrency;
-import com.utopian.weather.persistence.model.CountryInfo;
 import com.utopian.weather.persistence.model.Currency;
 import com.utopian.weather.persistence.model.Currency.CurrencyBuilder;
 import com.utopian.weather.persistence.repository.CountryCurrencyRepository;
@@ -41,36 +38,30 @@ public class CountryInternalServiceImpl implements CountryInternalService {
     private final CountryRepository countryRepository;
     private final CurrencyRepository currencyRepository;
     private final CountryCurrencyRepository countryCurrencyRepository;
-    private final ServiceMapper serviceMapper;
 
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
     public CountryInternalServiceImpl(String countryApiBaseUrl, RestTemplate restTemplate,
             CountryRepository countryRepository, CurrencyRepository currencyRepository,
-            CountryCurrencyRepository countryCurrencyRepository,
-            ServiceMapper serviceMapper) {
+            CountryCurrencyRepository countryCurrencyRepository) {
         this.countryApiBaseUrl = countryApiBaseUrl;
         this.restTemplate = restTemplate;
         this.countryRepository = countryRepository;
         this.currencyRepository = currencyRepository;
         this.countryCurrencyRepository = countryCurrencyRepository;
-        this.serviceMapper = serviceMapper;
         this.loadAllCountries();
     }
 
     @Override
-    public List<CountryInfo> getAllCountries() {
+    public List<Country> getAllCountries() {
         return StreamSupport.stream(countryRepository.findAll().spliterator(), false)
-                .map(c -> serviceMapper.map(c, CountryInfo.class))
                 .collect(Collectors.toList());
     }
 
     @Override
-    public CountryInfo getCountryInfo(String cca3) {
-        Country country = countryRepository.findByCca3(cca3)
+    public Country getCountry(String cca3) {
+        return countryRepository.findByCca3(cca3)
                 .orElseThrow(() -> new CountryNotFoundException(cca3));
-
-        return serviceMapper.map(country, CountryInfo.class);
     }
 
     private void loadAllCountries() {
@@ -121,16 +112,21 @@ public class CountryInternalServiceImpl implements CountryInternalService {
                 .build());
         countryCreation.getCurrencies()
                 .forEach(currency -> {
-                    Currency savedCurrency = currencyRepository.save(Currency.builder()
-                            .code(currency.getCode())
-                            .name(currency.getName())
-                            .symbol(currency.getSymbol())
-                            .build());
+                    Currency savedCurrency = addCurrency(currency);
                     countryCurrencyRepository.save(CountryCurrency.builder()
                             .country(savedCountry)
                             .currency(savedCurrency)
                             .build());
                 });
+    }
+
+    private Currency addCurrency(Currency currency) {
+        Optional<Currency> currencyInDb = currencyRepository.findByCode(currency.getCode());
+        return currencyInDb.orElseGet(() -> currencyRepository.save(Currency.builder()
+                .code(currency.getCode())
+                .name(currency.getName())
+                .symbol(currency.getSymbol())
+                .build()));
     }
 
     private Optional<Country> getExisting(String countryName) {

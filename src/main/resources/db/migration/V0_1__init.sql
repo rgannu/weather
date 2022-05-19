@@ -65,27 +65,6 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE currency TO ${db.user};
 GRANT ALL ON TABLE currency TO ${db.owner};
 ---
 
----
-
-CREATE TABLE city_weather (
-    id bigint NOT NULL,
-    name character varying(255) NOT NULL,
-    description character varying(255) NOT NULL,
-    temp double precision NOT NULL,
-    min_temp double precision,
-    max_temp double precision,
-    wind_speed double precision NOT NULL
-);
-
-ALTER TABLE city_weather OWNER TO ${db.owner};
-
-ALTER TABLE ONLY city_weather
-    ADD CONSTRAINT city_weather_pkey PRIMARY KEY (id);
-
-GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE city_weather TO ${db.user};
-GRANT ALL ON TABLE city_weather TO ${db.owner};
----
-
 CREATE TABLE exchange_rate (
     id bigint NOT NULL,
     rate_date date NOT NULL,
@@ -107,9 +86,10 @@ GRANT ALL ON TABLE exchange_rate TO ${db.owner};
 CREATE TABLE country_currency (
     id bigint NOT NULL,
     country_id bigint NOT NULL,
-    currency_id bigint NOT NULL
+    currency_id bigint NOT NULL,
+    FOREIGN KEY (country_id) REFERENCES country (id),
+    FOREIGN KEY (currency_id) REFERENCES currency (id)
 );
-
 
 ALTER TABLE country_currency OWNER TO ${db.owner};
 
@@ -138,12 +118,39 @@ GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE geocode TO ${db.user};
 GRANT ALL ON TABLE geocode TO ${db.owner};
 ---
 
+---
+
+CREATE TABLE city_weather
+(
+    id               bigint                 NOT NULL,
+    measurement_date date                   NOT NULL,
+    description      character varying(255) NOT NULL,
+    temp             double precision       NOT NULL,
+    min_temp         double precision,
+    max_temp         double precision,
+    wind_speed       double precision       NOT NULL,
+    geocode_id       bigint                 NOT NULL,
+    FOREIGN KEY (geocode_id) REFERENCES geocode (id)
+);
+
+ALTER TABLE city_weather OWNER TO ${db.owner};
+
+ALTER TABLE ONLY city_weather
+    ADD CONSTRAINT city_weather_pkey PRIMARY KEY (id);
+
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE city_weather TO ${db.user};
+GRANT ALL ON TABLE city_weather TO ${db.owner};
+---
+
 CREATE TABLE weather (
     id bigint NOT NULL,
     weather_date date NOT NULL,
     country_id bigint NOT NULL,
     exchange_rate_id bigint NOT NULL,
-    city_weather_id bigint NOT NULL
+    city_weather_id bigint NOT NULL,
+    FOREIGN KEY (country_id) REFERENCES country (id),
+    FOREIGN KEY (exchange_rate_id) REFERENCES exchange_rate (id),
+    FOREIGN KEY (city_weather_id) REFERENCES city_weather (id)
 );
 
 

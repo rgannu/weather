@@ -18,16 +18,17 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.annotations.Type;
 
 @Entity
 @Table(name = "country")
 @Data
 @Builder
-@EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor(access = PROTECTED)
 @AllArgsConstructor(access = PROTECTED)
 public class Country {
+
     @Id
     @GeneratedValue(generator = "pooled")
     @Setter(AccessLevel.NONE)
@@ -56,6 +57,7 @@ public class Country {
     private String flag;
 
     @OneToMany(mappedBy = "country")
-    @Setter(AccessLevel.NONE)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private Set<CountryCurrency> countryCurrencies;
 }

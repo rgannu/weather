@@ -23,8 +23,7 @@ import lombok.ToString;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
-@EqualsAndHashCode(callSuper = false, exclude = {"country", "currency"})
-@ToString()
+@ToString
 public class CountryCurrency {
 
     @Id
@@ -35,10 +34,12 @@ public class CountryCurrency {
     @NotNull
     @ManyToOne
     @JoinColumn(name = "COUNTRY_ID", nullable = false)
+    @EqualsAndHashCode.Exclude
     private Country country;
 
     @NotNull
     @ManyToOne
     @JoinColumn(name = "CURRENCY_ID", nullable = false)
+    @EqualsAndHashCode.Exclude
     private Currency currency;
 }

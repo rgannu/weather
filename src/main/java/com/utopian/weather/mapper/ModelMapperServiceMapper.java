@@ -32,24 +32,25 @@ public class ModelMapperServiceMapper implements ServiceMapper {
 
     @Override
     public <D> D map(Object source, Class<D> destinationType) {
-        try{
+        try {
             if (source != null) {
                 return modelMapper.map(source, destinationType);
             } else {
                 return null;
             }
-        }
-        catch(MappingException me){
+        } catch (MappingException me) {
             throw convertException(me);
         }
     }
 
     private RuntimeException convertException(MappingException me) {
-        if(me.getErrorMessages() != null){
+        if (me.getErrorMessages() != null) {
             return me.getErrorMessages().stream()
-                    .filter(errorMessage -> RuntimeException.class.isAssignableFrom(errorMessage.getCause().getClass()))
+                    .filter(errorMessage -> RuntimeException.class.isAssignableFrom(
+                            errorMessage.getCause().getClass()))
                     .findFirst()
-                    .<RuntimeException>map(errorMessage -> (RuntimeException)errorMessage.getCause())
+                    .<RuntimeException>map(
+                            errorMessage -> (RuntimeException) errorMessage.getCause())
                     .orElse(me);
         }
         return me;
@@ -57,15 +58,14 @@ public class ModelMapperServiceMapper implements ServiceMapper {
 
     @Override
     public <D> D map(Object source, D destination) {
-        try{
+        try {
             if (source != null) {
                 modelMapper.map(source, destination);
                 return destination;
             } else {
                 return null;
             }
-        }
-        catch(MappingException me){
+        } catch (MappingException me) {
             throw convertException(me);
         }
     }
@@ -86,13 +86,14 @@ public class ModelMapperServiceMapper implements ServiceMapper {
     @Override
     public <D> List<D> mapToList(Collection<?> source, Class<D> destination) {
         checkNotNull(destination);
-        return ofNullable(source).map(Collection::stream).orElseGet(Stream::empty).map(s -> map(s, destination)).collect(Collectors.toList());
+        return ofNullable(source).map(Collection::stream).orElseGet(Stream::empty)
+                .map(s -> map(s, destination)).collect(Collectors.toList());
     }
 
     @Override
     public <S, D> Converter<S, D> getConverter(Class<S> source, Class<D> destinationType) {
         TypeMap<S, D> typeMap = modelMapper.getTypeMap(source, destinationType);
-        if(typeMap != null) {
+        if (typeMap != null) {
             return typeMap.getConverter();
         } else {
             return null;
@@ -102,7 +103,7 @@ public class ModelMapperServiceMapper implements ServiceMapper {
     @Override
     public <S, D> Converter<S, D> getPostConverter(Class<S> source, Class<D> destinationType) {
         TypeMap<S, D> typeMap = modelMapper.getTypeMap(source, destinationType);
-        if(typeMap != null) {
+        if (typeMap != null) {
             return typeMap.getPostConverter();
         } else {
             return null;

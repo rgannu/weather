@@ -1,11 +1,11 @@
 package com.utopian.weather.service.internal;
 
-import com.utopian.weather.persistence.model.CountryInfo;
+import com.utopian.weather.persistence.model.Country;
 import java.util.List;
 
 public interface CountryInternalService {
 
-    List<CountryInfo> getAllCountries();
+    List<Country> getAllCountries();
 
-    CountryInfo getCountryInfo(String cca3);
+    Country getCountry(String cca3);
 }

@@ -11,20 +11,25 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
+@Transactional(propagation = Propagation.REQUIRED)
 public class CountryCurrencyServiceImpl implements CountryCurrencyService {
 
+    private final CountryCurrencyRepository countryCurrencyRepository;
+
     @Autowired
-    private CountryCurrencyRepository countryCurrencyRepository;
+    public CountryCurrencyServiceImpl(final CountryCurrencyRepository countryCurrencyRepository) {
+        this.countryCurrencyRepository = countryCurrencyRepository;
+    }
 
     @Transactional(propagation = Propagation.REQUIRED, readOnly = false)
     public CountryCurrency create(Country country, Currency currency) {
         Optional<CountryCurrency> countryCurrency = countryCurrencyRepository.findByCountryAndCurrencyId(
                 country.getId(), currency.getId()).findAny();
-        return countryCurrency.orElseGet(() -> countryCurrencyRepository.save(CountryCurrency.builder()
-                .country(country)
-                .currency(currency)
-                .build()));
+        return countryCurrency.orElseGet(
+                () -> countryCurrencyRepository.save(CountryCurrency.builder()
+                        .country(country)
+                        .currency(currency)
+                        .build()));
     }
 
     @Override
