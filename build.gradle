@@ -18,6 +18,9 @@ repositories {
 	mavenCentral()
 }
 
+ext {
+	assertjVersion = '3.22.0'
+}
 dependencies {
 	annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
 	implementation "org.modelmapper:modelmapper:3.0.0"
@@ -32,6 +35,8 @@ dependencies {
 
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation "org.assertj:assertj-core:${assertjVersion}"
+
 }
 
 tasks.named('test') {

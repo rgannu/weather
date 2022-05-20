@@ -49,7 +49,6 @@ public class CountryInternalServiceImpl implements CountryInternalService {
         this.countryRepository = countryRepository;
         this.currencyRepository = currencyRepository;
         this.countryCurrencyRepository = countryCurrencyRepository;
-        this.loadAllCountries();
     }
 
     @Override
@@ -64,7 +63,7 @@ public class CountryInternalServiceImpl implements CountryInternalService {
                 .orElseThrow(() -> new CountryNotFoundException(cca3));
     }
 
-    private void loadAllCountries() {
+    public void loadAllCountries() {
         try {
             UriComponentsBuilder builder = getUriComponentsBuilder(countryApiBaseUrl + "/all");
             String jsonResponse = restTemplate.getForObject(builder.build().toUri(), String.class);

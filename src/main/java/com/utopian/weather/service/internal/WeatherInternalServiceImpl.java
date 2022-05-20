@@ -64,32 +64,32 @@ public class WeatherInternalServiceImpl implements WeatherInternalService {
         getWeather(Arrays.asList(this.listOfCountries), startDate, endDate)
                 .forEach((countryCode, weatherList) ->
                         weatherList.forEach(weather -> {
-                    CountryCurrency countryCurrency = weather.getCountry()
-                            .getCountryCurrencies().stream()
-                            .map(Optional::ofNullable)
-                            .findFirst()
-                            .orElseGet(Optional::empty)
-                            .orElse(null);
+                            CountryCurrency countryCurrency = weather.getCountry()
+                                    .getCountryCurrencies().stream()
+                                    .map(Optional::ofNullable)
+                                    .findFirst()
+                                    .orElseGet(Optional::empty)
+                                    .orElse(null);
 
-                    weatherInfoCsvList.add(WeatherInfoCsv.builder()
-                            .countryCode(countryCode)
-                            .date(weather.getDate())
-                            .name(weather.getCountry().getName())
-                            .capital(weather.getCountry().getCapital())
-                            .cca2(weather.getCountry().getCca2())
-                            .cca3(weather.getCountry().getCca3())
-                            .cioc(weather.getCountry().getCioc())
-                            .population(weather.getCountry().getPopulation())
-                            .currencyCode(
-                                    countryCurrency != null ? countryCurrency.getCurrency()
-                                            .getCode() : null)
-                            .targetCurrency(weather.getExchangeRate().getTarget().getCode())
-                            .exchangeRate(weather.getExchangeRate().getRate())
-                            .temp(weather.getCityWeather().getTemp())
-                            .description(weather.getCityWeather().getDescription())
-                            .windSpeed(weather.getCityWeather().getWindSpeed())
-                            .build());
-                }));
+                            weatherInfoCsvList.add(WeatherInfoCsv.builder()
+                                    .countryCode(countryCode)
+                                    .date(weather.getDate())
+                                    .name(weather.getCountry().getName())
+                                    .capital(weather.getCountry().getCapital())
+                                    .cca2(weather.getCountry().getCca2())
+                                    .cca3(weather.getCountry().getCca3())
+                                    .cioc(weather.getCountry().getCioc())
+                                    .population(weather.getCountry().getPopulation())
+                                    .currencyCode(
+                                            countryCurrency != null ? countryCurrency.getCurrency()
+                                                    .getCode() : null)
+                                    .targetCurrency(weather.getExchangeRate().getTarget().getCode())
+                                    .exchangeRate(weather.getExchangeRate().getRate())
+                                    .temp(weather.getCityWeather().getTemp())
+                                    .description(weather.getCityWeather().getDescription())
+                                    .windSpeed(weather.getCityWeather().getWindSpeed())
+                                    .build());
+                        }));
 
         return weatherInfoCsvList;
     }

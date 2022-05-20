@@ -39,20 +39,21 @@ public class WeatherServiceImpl implements WeatherService {
             List<WeatherInfo> weatherInfoList = new ArrayList<>();
             value.forEach(
                     weather -> {
-                        System.out.println("Exchange Rate: " + weather.getExchangeRate());
-                        System.out.println("Exchange RateInfo: " + serviceMapper.map(weather.getExchangeRate(), ExchangeRateInfo.class));
                         weatherInfoList.add(WeatherInfo.builder()
                                 .date(weather.getDate())
                                 .exchangeRate(ExchangeRateInfo.builder()
                                         .rateDate(weather.getExchangeRate().getDate())
-                                        .baseCurrency(serviceMapper.map(weather.getExchangeRate().getBase(),
+                                        .baseCurrency(serviceMapper.map(
+                                                weather.getExchangeRate().getBase(),
                                                 CurrencyInfo.class))
-                                        .targetCurrency(serviceMapper.map(weather.getExchangeRate().getTarget(),
+                                        .targetCurrency(serviceMapper.map(
+                                                weather.getExchangeRate().getTarget(),
                                                 CurrencyInfo.class))
                                         .rate(weather.getExchangeRate().getRate())
                                         .build())
                                 .country(serviceMapper.map(weather.getCountry(), CountryInfo.class))
-                                .cityWeather(serviceMapper.map(weather.getCityWeather(), CityWeatherInfo.class))
+                                .cityWeather(serviceMapper.map(weather.getCityWeather(),
+                                        CityWeatherInfo.class))
                                 .build());
                     });
             weatherInfoListMap.put(key, weatherInfoList);

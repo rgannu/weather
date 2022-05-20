@@ -76,8 +76,11 @@ public class WeatherConfiguration {
         restTemplateBuilder.setReadTimeout(timeout)
                 .setConnectTimeout(timeout)
                 .build();
-        return new CountryInternalServiceImpl(countryApiBaseUrl, restTemplateBuilder.build(),
+        CountryInternalServiceImpl countryInternalService = new CountryInternalServiceImpl(
+                countryApiBaseUrl, restTemplateBuilder.build(),
                 countryRepository, currencyRepository, countryCurrencyRepository);
+        countryInternalService.loadAllCountries();
+        return countryInternalService;
     }
 
     @Bean
